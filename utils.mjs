@@ -66,4 +66,3 @@ export function agregarSuperheroes(rutaOriginal, rutaNueva) {
     fs.writeFileSync(rutaOriginal, JSON.stringify(listaActualizada, null, 2), 'utf8');
     console.log('Lista de superhéroes actualizada con exito.');
 }
-}
