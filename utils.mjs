@@ -21,37 +21,49 @@ class Superheroe
 }
 
 // Funcion para leer y ordenar los superhéroes
-export function leerSuperheroes(ruta)
-{const datos = fs.readFileSync(ruta, 'utf8');
+export function leerSuperheroes(ruta) {
+    const datos = fs.readFileSync(ruta, 'utf8');
     const superheroesArray = JSON.parse(datos);
 
-// Convertir a instancias de Superheroe
-const superheroes = superheroesArray.map
-(hero => new Superheroe(hero.id, hero.nombreSuperheroe, hero.nombreReal, hero.nombreSociedad, hero.edad, hero.planetaOrigen, hero.debilidad, hero.poder, hero.habilidadEspecial,hero.aliado, hero.enemigo));
+    // Convertir a instancias de Superheroe
+    const superheroes = superheroesArray.map(hero => new Superheroe(hero.id, hero.nombreSuperheroe, hero.nombreReal, hero.nombreSociedad, hero.edad, hero.planetaOrigen, hero.debilidad, hero.poder, hero.habilidadEspecial, hero.aliado, hero.enemigo));
 
-// Ordenar por nombre superhéroe
-superheroes.sort((a, b) => a.nombreSuperheroe.localeCompare(b.nombreSuperheroe));
+    // Ordenar por nombre superhéroe
+    superheroes.sort((a, b) => a.nombreSuperheroe.localeCompare(b.nombreSuperheroe));
 
-return superheroes;
+    return superheroes;
 }
 
 // Nueva funcion para agregar superhéroes
-export function agregarSuperheroes(rutaOriginal, rutaNueva)
-{
+export function agregarSuperheroes(rutaOriginal, rutaNueva) {
     const datosOriginales = fs.readFileSync(rutaOriginal, 'utf8');
     const datosNuevos = fs.readFileSync(rutaNueva, 'utf8');
 
-     const superheroesOriginales = JSON.parse(datosOriginales);
-     const nuevosSuperheroes = JSON.parse(datosNuevos);
+    const superheroesOriginales = JSON.parse(datosOriginales);
+    const nuevosSuperheroes = JSON.parse(datosNuevos);
 
-// Convertir los nuevos superhéroes a instancias de superheroe
-    const instanciasNuevos = nuevosSuperheroes.map
-    (hero => new Superheroe(hero.id, hero.nombreSuperheroe, hero.nombreReal, hero.nombreSociedad, hero.edad, hero.planetaOrigen, hero.debilidad, hero.poder, hero.habilidadEspecial,hero.aliado, hero.enemigo));
+    // Convertir los nuevos superhéroes a instancias de superheroe
+    const instanciasNuevos = nuevosSuperheroes.map(hero => new Superheroe(hero.id, hero.nombreSuperheroe, hero.nombreReal, hero.nombreSociedad, hero.edad, hero.planetaOrigen, hero.debilidad, hero.poder, hero.habilidadEspecial, hero.aliado, hero.enemigo));
 
-// Cambiar listas
-    const listaActualizada = [...superheroesOriginales, ...instanciasNuevos];
+    // Cambiar listas - convertir instancias de vuelta a objetos planos
+    const instanciasNuevosPlanos = instanciasNuevos.map(hero => ({
+        id: hero.id,
+        nombreSuperheroe: hero.nombreSuperheroe,
+        nombreReal: hero.nombreReal,
+        nombreSociedad: hero.nombreSociedad,
+        edad: hero.edad,
+        planetaOrigen: hero.planetaOrigen,
+        debilidad: hero.debilidad,
+        poder: hero.poder,
+        habilidadEspecial: hero.habilidadEspecial,
+        aliado: hero.aliado,
+        enemigo: hero.enemigo
+    }));
 
-// Guardar la lista actualizada
-fs.writeFileSync(rutaOriginal, JSON.stringify(listaActualizada, null, 2), 'utf8');
-console.log('Lista de superhéroes actualizada con exito.');
+    const listaActualizada = [...superheroesOriginales, ...instanciasNuevosPlanos];
+
+    // Guardar la lista actualizada
+    fs.writeFileSync(rutaOriginal, JSON.stringify(listaActualizada, null, 2), 'utf8');
+    console.log('Lista de superhéroes actualizada con exito.');
+}
 }
